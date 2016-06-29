@@ -1,34 +1,19 @@
 :- module(check, [check/1]).
 :- use_module(eval).
 
-check(Tree) :- emptyenv(Env), check(Env, Tree), !.
+check(Tree) :- emptyenv(Env), check(Tree, [Env], _), !.
 
-check(_, []) :- !.
-check(Env, [S|T]) :-
-	checkStmt(Env, S, NewEnv),
-	check(NewEnv, T).
+check([]) --> [].
+check([S|T]) --> checkStmt(S), check(T).
 
-checkStmt(Env, decl(Type, Id, Exp), NewEnv) :-
-	nonmember((Id, _, _), Env) -> (
-		typeExp(Env, Exp, EType),
-		(Type = EType -> (
-			NewEnv = [(Id, Type, _) | Env]
-		) ; (
-			format("assignment ~s <- ~s", [Type, EType]), !, fail
-		))
-	) ; (
-		format("variable ~s already declared", [Id]), !, fail
-	).
-
-
+checkStmt(decl(Type, Id, Exp)) -->
+	( declareVar(Id, Type, _) ; { format("variable ~s already declared\n", [Id]), fail } ), !,
+	( typeExp(Exp, EType) ; { format("cannot type expression ~w\n", [Exp]), fail } ), !,
+	{ Type = EType ; format("assignment ~s <- ~s\n", [Type, EType]), fail }, !.
 
 % typeExp(Env, Exp, Type)
-typeExp(_, str(_), str).
-typeExp(_, int(_), int).
-typeExp(Env, add(E1, E2), int) :-
-	typeExp(Env, E1, int),
-	typeExp(Env, E2, int).
-typeExp(Env, mul(E1, E2), int) :-
-	typeExp(Env, E1, int),
-	typeExp(Env, E2, int).
-typeExp(Env, var(V), Type) :- member((V, Type, _), Env).
+typeExp(str(_), str) --> [].
+typeExp(int(_), int) --> [].
+typeExp(add(E1, E2), int) --> typeExp(E1, int), typeExp(E2, int).
+typeExp(mul(E1, E2), int) --> typeExp(E1, int), typeExp(E2, int).
+typeExp(var(V), Type) --> varType(V, Type).

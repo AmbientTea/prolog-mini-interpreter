@@ -8,8 +8,8 @@
 
 :-
     current_prolog_flag(argv, [File | _]),
-    parse(File, Tree),
-    check(Tree),
+    ( parse(File, Tree) ; halt ),
+    ( check(Tree) ; halt ),
     run(Tree),
     halt.
 
