@@ -1,7 +1,6 @@
 :- module(check, [check/1]).
 :- use_module(eval).
 
-
 check(Tree) :- emptyenv(Env), check(Env, Tree), !.
 
 check(_, []) :- !.
@@ -13,7 +12,7 @@ checkStmt(Env, decl(Type, Id, Exp), NewEnv) :-
 	nonmember((Id, _, _), Env) -> (
 		typeExp(Env, Exp, EType),
 		(Type = EType -> (
-			declareVar(Env, Id, Type, _, NewEnv)
+			NewEnv = [(Id, Type, _) | Env]
 		) ; (
 			format("assignment ~s <- ~s", [Type, EType]), !, fail
 		))
@@ -32,4 +31,4 @@ typeExp(Env, add(E1, E2), int) :-
 typeExp(Env, mul(E1, E2), int) :-
 	typeExp(Env, E1, int),
 	typeExp(Env, E2, int).
-typeExp(Env, var(V), Type) :- varType(Env, V, Type).
+typeExp(Env, var(V), Type) :- member((V, Type, _), Env).
