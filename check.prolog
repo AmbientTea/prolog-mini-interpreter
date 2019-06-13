@@ -8,6 +8,9 @@ check(Tree) :-
     seqmap(checkStmt, Tree, Env, _).
 
 checkStmt(decl(Type, Id, Exp)) -->
+    { member(Type, [int, str])
+    ; format("unknown type: ~s\n", [Type]), fail },
+
 	( declareVar(Id, Type, _)
 	; { format("variable ~s already declared\n", [Id]), fail } ), !,
 	
