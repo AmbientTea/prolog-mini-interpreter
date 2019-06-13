@@ -1,15 +1,12 @@
-:- module(eval, [eval//2, emptyenv/1, declareVar//3, varValue//2, setValue//2, varType//2, nonmember/2]).
+:- module(eval, [eval//2, emptyenv/1, declareVar//3, varValue//2, setValue//2, varType//2]).
 
 :- use_module(library(dcg_core)).
-
-nonmember(_, []) :- !.
-nonmember(X, [H|T]) :- X \= H, nonmember(X, T).
 
 % var = ( name, (type, value))
 emptyenv([]).
 declareVar(Id, Type, Value) -->
 	get(Env),
-	{ nonmember((Id, _), Env) },
+	{ \+ member((Id, _), Env) },
 	set([(Id, Type, Value) | Env]).
 
 varValue(Id, Val) -->
