@@ -31,11 +31,11 @@ sexp(var(V)) --> [V], {!}.
 
 % additive
 aexp(E) --> mexp(E).
-aexp(add(E1, E2)) --> mexp(E1), [+], aexp(E2).
+aexp(E1 + E2) --> mexp(E1), [+], aexp(E2).
 
 % multiplicative
 mexp(E) --> sexp(E).
-mexp(mul(E1, E2)) --> sexp(E1), [*], mexp(E2).
+mexp(E1 * E2) --> sexp(E1), [*], mexp(E2).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -14,6 +14,6 @@ checkStmt(decl(Type, Id, Exp)) -->
 % typeExp(Env, Exp, Type)
 typeExp(str(_), str) --> [].
 typeExp(int(_), int) --> [].
-typeExp(add(E1, E2), int) --> typeExp(E1, int), typeExp(E2, int).
-typeExp(mul(E1, E2), int) --> typeExp(E1, int), typeExp(E2, int).
+typeExp(E1 + E2, int) --> typeExp(E1, int), typeExp(E2, int).
+typeExp(E1 * E2, int) --> typeExp(E1, int), typeExp(E2, int).
 typeExp(var(V), Type) --> varType(V, Type).

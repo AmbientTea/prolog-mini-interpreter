@@ -21,11 +21,11 @@ varType(Id, Type), [Env] -->
 eval( int(I), I ) --> [].
 eval( str(S), S ) --> [].
 eval( var(V), Val ) --> varValue(V, Val).
-eval( add(E1, E2), V ) -->
+eval( E1 + E2, V ) -->
 	eval(E1, V1),
 	eval(E2, V2),
 	{ V is V1 + V2 }.
-eval( mul(E1, E2), V ) -->
+eval( E1 * E2, V ) -->
 	eval(E1, V1),
 	eval(E2, V2),
 	{ V is V1 * V2 }.
