@@ -9,16 +9,16 @@ check(Tree) :-
 
 checkStmt(decl(Type, Id, Exp)) -->
     { member(Type, [int, str])
-    ; format("unknown type: ~s\n", [Type]), fail },
+    ; format(user_error, "unknown type: ~s\n", [Type]), fail }, !,
 
 	( declareVar(Id, Type, _)
-	; { format("variable ~s already declared\n", [Id]), fail } ), !,
+	; { format(user_error, "variable ~s already declared\n", [Id]), fail } ), !,
 	
 	( typeExp(Exp, EType)
-	; { format("cannot type expression ~w\n", [Exp]), fail } ), !,
+	; { format(user_error, "cannot type expression ~w\n", [Exp]), fail } ), !,
 	
 	{ Type = EType
-	; format("assignment ~s <- ~s\n", [Type, EType]), fail }, !.
+	; format(user_error, "assignment ~s <- ~s\n", [Type, EType]), fail }, !.
 
 % typeExp(Env, Exp, Type)
 typeExp(str(_), str) --> nop.
