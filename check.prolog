@@ -3,10 +3,9 @@
 
 :- use_module(library(dcg_core)).
 
-check(Tree) :- emptyenv(Env), check(Tree, Env, _), !.
-
-check([]) --> nop.
-check([S|T]) --> checkStmt(S), check(T).
+check(Tree) :-
+    emptyenv(Env),
+    seqmap(checkStmt, Tree, Env, _).
 
 checkStmt(decl(Type, Id, Exp)) -->
 	( declareVar(Id, Type, _) ; { format("variable ~s already declared\n", [Id]), fail } ), !,

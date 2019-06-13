@@ -1,6 +1,8 @@
 :- module(parser, [parse/2, tokenize//1]).
 :- use_module(library(dcg/basics)).
 
+:- use_module(library(dcg_core)).
+
 parse( File, Tree ) :-
 	phrase_from_file(tokenize(Tokens), File),
 	( phrase(stmts(Tree), Tokens) ; phrase(exp(Tree), Tokens) ), !
@@ -41,9 +43,7 @@ mexp(E1 * E2) --> sexp(E1), [*], mexp(E2).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % statements
-
-stmts([]) --> [].
-stmts([H | T]) --> stmt(H), stmts(T).
+stmts(Stmts) --> seqmap(stmt, Stmts).
 
 stmt(block(S)) --> ['{'], stmts(S), ['}'].
 

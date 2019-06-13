@@ -1,10 +1,11 @@
 :- module(run, [run/1]).
 :- use_module(eval).
 
-run(Stmts) :- emptyenv(Env), run(Stmts, Env, _), !.
+:- use_module(library(dcg_core)).
 
-run([]) --> [].
-run([S | T]) --> runStmt(S), !, run(T).
+run(Stmts) :-
+    emptyenv(Env),
+    seqmap(runStmt, Stmts, Env, _).
 
 runStmt( decl(Type, Id, Exp) ) -->
 	eval(Exp, Value),
