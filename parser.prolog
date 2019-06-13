@@ -5,7 +5,8 @@
 
 parse( File, Tree ) :-
 	phrase_from_file(tokenize(Tokens), File),
-	( phrase(stmts(Tree), Tokens) ; phrase(exp(Tree), Tokens) ), !
+	( phrase(stmts(Tree), Tokens)
+	; phrase(exp(Tree), Tokens) )
 	.
 
 token(str(T)) --> "\""	, string(S), "\"", {!, atom_chars(T, S)}.

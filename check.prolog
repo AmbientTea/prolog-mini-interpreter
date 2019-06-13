@@ -8,9 +8,14 @@ check(Tree) :-
     seqmap(checkStmt, Tree, Env, _).
 
 checkStmt(decl(Type, Id, Exp)) -->
-	( declareVar(Id, Type, _) ; { format("variable ~s already declared\n", [Id]), fail } ), !,
-	( typeExp(Exp, EType) ; { format("cannot type expression ~w\n", [Exp]), fail } ), !,
-	{ Type = EType ; format("assignment ~s <- ~s\n", [Type, EType]), fail }, !.
+	( declareVar(Id, Type, _)
+	; { format("variable ~s already declared\n", [Id]), fail } ), !,
+	
+	( typeExp(Exp, EType)
+	; { format("cannot type expression ~w\n", [Exp]), fail } ), !,
+	
+	{ Type = EType
+	; format("assignment ~s <- ~s\n", [Type, EType]), fail }, !.
 
 % typeExp(Env, Exp, Type)
 typeExp(str(_), str) --> nop.
